@@ -1,0 +1,6 @@
+[submodule "job-platform-api"]
+	path = job-platform-api
+	url = ../job-platform-api
+[submodule "job-platform-ui"]
+	path = job-platform-ui
+	url = ../job-platform-ui
