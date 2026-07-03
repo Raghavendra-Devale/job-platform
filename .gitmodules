@@ -4,3 +4,6 @@
 [submodule "job-platform-ui"]
 	path = job-platform-ui
 	url = https://github.com/Raghavendra-Devale/job-platform-ui.git
+[submodule "fastapi-ai"]
+	path = fastapi-ai
+	url = https://github.com/Raghavendra-Devale/fastapi-ai.git
