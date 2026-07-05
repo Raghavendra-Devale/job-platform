@@ -1,0 +1,85 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: job-platform-db
+
+    environment:
+      POSTGRES_DB: job_platform
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "0000"
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - job_platform_data:/var/lib/postgresql/data
+
+  job-platform-api:
+    build:
+      context: ./job-platform-api
+
+    container_name: job-platform-api
+
+    depends_on:
+      - postgres
+
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/job_platform
+      DB_USERNAME: postgres
+      DB_PASSWORD: "0000"
+
+      SERVER_PORT: 8080
+
+      AI_ENABLED: "true"
+      AI_BASE_URL: http://fastapi-ai:8000
+      AI_TIMEOUT: 120s
+      AI_CONNECT_TIMEOUT: 30s
+      AI_READ_TIMEOUT: 120s
+
+      ARBEITNOW_ENABLED: "true"
+      REMOTEOK_ENABLED: "true"
+
+      JAVA_TOOL_OPTIONS: "-Duser.timezone=Asia/Kolkata"
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    ports:
+      - "8080:8080"
+
+  fastapi-ai:
+    build:
+      context: ./fastapi-ai
+
+    container_name: fastapi-ai
+
+    environment:
+      PORT: 8000
+      AI_POSTGRES_URL: postgresql://postgres:0000@postgres:5432/job_platform
+      AI_REDIS_URL: redis://localhost:6379/0
+      AI_OLLAMA_BASE_URL: http://host.docker.internal:11434
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    ports:
+      - "8000:8000"
+
+  job-platform-ui:
+    build:
+      context: ./job-platform-ui
+
+    container_name: job-platform-ui
+
+    ports:
+      - "4200:4200"
+
+    volumes:
+      - ./job-platform-ui:/app
+      - /app/node_modules
+
+    depends_on:
+      - job-platform-api
+
+volumes:
+  job_platform_data:
