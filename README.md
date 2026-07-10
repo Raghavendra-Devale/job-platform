@@ -184,30 +184,34 @@ Once the backend is running, Swagger UI is available at:
 ```
 job-platform/
 │
-├── job-platform-api/                   # Spring Boot Backend
-│   └── src/main/java/com/raghav/jobplatform/
-│       ├── auth/                       # Authentication (login, register)
-│       ├── jobs/                       # Job listings, applications, sync tasks
-│       ├── user/                       # User profiles, resume processing
-│       ├── config/                     # Security, JWT, REST WebClient configs
-│       ├── common/ai/                  # Gateway REST Client for FastAPI communication
-│       └── common/                     # Global exception handling
+├── job-platform-api/                   # Spring Boot Backend Gateway
+│   └── src/main/java/com/jobrecommendation/
+│       ├── user/                       # Profile, settings, auth controllers & services
+│       ├── resume/                     # PDF resume upload and status tracking
+│       ├── jobs/                       # Postings aggregation and syncer triggers
+│       ├── applications/               # Applied and Saved jobs tracking
+│       ├── recommendation/             # Recommendations API orchestrator
+│       ├── dashboard/                  # Candidate workspace statistics
+│       ├── infrastructure/             # Security filters, WebClient AI Client configs
+│       ├── common/                     # Global exception filters and cross-cutting helpers
+│       └── JobPlatformApiApplication.java # Spring Boot entry class
 │
-├── job-platform-ui/                    # Angular Frontend
+├── job-platform-ui/                    # Angular Frontend SPA
 │   └── src/app/
-│       ├── core/                       # Services, models, guards, interceptors
-│       ├── features/                   # Standalone modules (jobs, recommendations, profile, etc.)
-│       └── shared/                     # Navbar, confirmations, toast popups
+│       ├── core/                       # HTTP interceptors, services, route guards, models
+│       ├── features/                   # Standalone pages (dashboard, resume, job, profile)
+│       └── shared/                     # UI overlays, modals, bells, navbar layout
 │
-├── fastapi-ai/                         # FastAPI AI & Vector Matching (AI Engine)
+├── fastapi-ai/                         # FastAPI Machine Learning Engine
 │   ├── app/
-│   │   ├── api/                        # HTTP routes (resume, recommendations)
-│   │   ├── domain/                     # Logic for embeddings, similarity scoring, explanations
-│   │   ├── core/                       # Config settings and exception handlers
-│   │   └── main.py                     # App entry point
+│   │   ├── api/                        # HTTP controllers (resume, recommendations, health)
+│   │   ├── application/                # Application use-case coordinators
+│   │   ├── domain/                     # Embeddings, similarity, LLM provider models
+│   │   ├── core/                       # Settings validation & middleware hooks
+│   │   └── main.py                     # Uvicorn entry point
 │
 ├── .gitmodules                         # Submodule references
-└── README.md                          # monorepo README
+└── README.md                          # Monorepo README
 ```
 
 ---
